@@ -264,42 +264,42 @@ fn organize_files(
     
     let move_count = Arc::new(Mutex::new(0));
     let error_count = Arc::new(Mutex::new(0));
-    
-    for file in files {
-        let target_subdir = match organization_type {
+      for file in files {        let target_subdir = match organization_type {
             "type" => {
                 match &file.category {
-                    FileCategory::Document => "Documents",
-                    FileCategory::Image => "Images",
-                    FileCategory::Video => "Videos",
-                    FileCategory::Audio => "Audio",
-                    FileCategory::Archive => "Archives",
-                    FileCategory::Code => "Code",
-                    FileCategory::Executable => "Executables",
+                    FileCategory::Document => "Documents".to_string(),
+                    FileCategory::Image => "Images".to_string(),
+                    FileCategory::Video => "Videos".to_string(),
+                    FileCategory::Audio => "Audio".to_string(),
+                    FileCategory::Archive => "Archives".to_string(),
+                    FileCategory::Code => "Code".to_string(),
+                    FileCategory::Executable => "Executables".to_string(),
                     FileCategory::Other(ext) => {
                         if ext == "unknown" {
-                            "Other"
+                            "Other".to_string()
                         } else {
-                            "Miscellaneous"
+                            "Miscellaneous".to_string()
                         }
                     }
                 }
-            }
+            },
             "date" => {
                 let datetime = DateTime::<Utc>::from_timestamp(file.last_modified as i64, 0).unwrap();
                 let local_time = datetime.with_timezone(&Local);
-                local_time.format("%Y-%m").to_string().as_str().into()
-            }
+                local_time.format("%Y-%m").to_string()
+            },
             "ext" => {
                 if let Some(extension) = file.path.extension() {
-                    extension.to_string_lossy().to_string().as_str()
+                    extension.to_string_lossy().to_string()
                 } else {
-                    "no_extension"
+                    "no_extension".to_string()
                 }
-            }
-            _ => "Unsorted",
+            },
+            _ => "Unsorted".to_string(),
         };
         
+        // Create a copy for later use
+        let subdir_name = target_subdir.clone();
         let target_path = target_dir.join(target_subdir);
         
         if !dry_run {
@@ -347,9 +347,8 @@ fn organize_files(
                 }
             }
         }
-        
-        pb.inc(1);
-        pb.set_message(format!("Moving to {}", target_subdir));
+          pb.inc(1);
+        pb.set_message(format!("Moving to {}", subdir_name));
     }
     
     let move_count = *move_count.lock().unwrap();
@@ -615,16 +614,15 @@ fn main() -> Result<(), Box<dyn Error>> {
             let dir = Path::new(dir_str);
             
             update_recent_directories(&mut config, dir)?;
-            
-            let recursive = scan_matches.is_present("recursive");
-            let find_duplicates = scan_matches.is_present("duplicates");
+              let recursive = scan_matches.is_present("recursive");
+            let should_find_duplicates = scan_matches.is_present("duplicates");
             
             println!(
                 "{}",
                 format!("Scanning directory: {}", dir.display()).bold().green()
             );
             
-            let files = scan_directory(dir, &config, find_duplicates, recursive)?;
+            let files = scan_directory(dir, &config, should_find_duplicates, recursive)?;
             
             if files.is_empty() {
                 println!("No files found in the specified directory.");
@@ -633,7 +631,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             
             display_storage_report(&files);
             
-            if find_duplicates {
+            if should_find_duplicates {
                 let duplicates = find_duplicates(&files);
                 
                 if duplicates.is_empty() {
