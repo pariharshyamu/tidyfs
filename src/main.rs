@@ -3,10 +3,10 @@ use colored::*;
 use indicatif::{ProgressBar, ProgressStyle};
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs::{self, File};
-use std::io::{self, Read, Write};
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use walkdir::WalkDir;
@@ -238,13 +238,6 @@ fn format_size(size: u64) -> String {
     } else {
         format!("{} bytes", size)
     }
-}
-
-// Format timestamp as readable date
-fn format_timestamp(timestamp: u64) -> String {
-    let datetime = DateTime::<Utc>::from_timestamp(timestamp as i64, 0).unwrap();
-    let local_time = datetime.with_timezone(&Local);
-    local_time.format("%Y-%m-%d %H:%M:%S").to_string()
 }
 
 // Organize files by moving them to category folders
