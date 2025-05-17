@@ -511,7 +511,7 @@ fn display_storage_report(files: &[FileInfo]) {
 fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("TidyFS")
         .version("1.0")
-        .author("Claude")
+        .author("Shyamu Parihar")
         .about("Smart file system organizer and analyzer")
         .subcommand(
             SubCommand::with_name("scan")
