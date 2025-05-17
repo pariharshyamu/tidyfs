@@ -19,7 +19,7 @@ TidyFS is a powerful command-line tool written in Rust that helps you organize, 
 1. Make sure you have Rust and Cargo installed. If not, install them from [rustup.rs](https://rustup.rs/).
 2. Clone the repository:
    ```
-   git clone https://github.com/yourusername/tidyfs.git
+   git clone https://github.com/pariharshyamu/tidyfs.git
    cd tidyfs
    ```
 3. Build and install:
